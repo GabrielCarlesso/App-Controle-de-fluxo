@@ -3,12 +3,14 @@ package com.example.androidplot;
 import static com.example.androidplot.R.*;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
+
 import android.graphics.*;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.androidplot.ui.SeriesRenderer;
@@ -18,9 +20,6 @@ import com.androidplot.xy.XYSeries;
 import com.androidplot.xy.*;
 
 import java.text.DecimalFormat;
-import java.text.FieldPosition;
-import java.text.Format;
-import java.text.ParsePosition;
 import java.util.*;
 
 
@@ -30,71 +29,96 @@ public class MainActivity extends AppCompatActivity {
     private XYSeries series1,series2,series3,series4;
     private MyBarFormatter formatter1, formatter2, formatter3, formatter4;
     private CheckBox boxManha, boxMeioDia, boxTarde, boxNoite;
-
-
+    private ImageView buttonDataInicial;
+    EditText selecData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout.activity_main);
 
-        data_fluxo data = new data_fluxo();
+
+        plotBarGraph();
+
+
+        Calendar calendario = Calendar.getInstance();
+        String dataDeHoje = (calendario.get(Calendar.MONTH)+1)+"/"+calendario.get(Calendar.YEAR);
+
+        EditText selectDataInicial= (EditText) findViewById(id.selectMonth);
+        selectDataInicial.setText(dataDeHoje);
+
+        ImageView selectMonthButtom = (ImageView) findViewById(id.selectMonthButtom);
+
+        selectMonthButtom.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                DialogFragment dialogFragment = new MonthDatePicker();
+                dialogFragment.show(getSupportFragmentManager(),"Mes");
+            }
+        });
+
+
+    }
+
+    private void plotBarGraph(){
+        data_fluxo data = new data_fluxo(); //Busca os dados de fluxo de pessoas
+
         myPlot = findViewById(id.barPlotMensal);
-        PanZoom.attach(myPlot,PanZoom.Pan.HORIZONTAL, PanZoom.Zoom.NONE);
+        PanZoom.attach(myPlot,PanZoom.Pan.HORIZONTAL, PanZoom.Zoom.NONE); // Habilita apenas o scroll horizontal
+        myPlot.getOuterLimits().set(0, 31.5, 0, 400);
 
-        TextView titulo = (TextView) findViewById(id.titulo);
-        titulo.setText("Plot");
-
-        boxManha = (CheckBox) findViewById(id.checkBoxManha);
-        boxMeioDia = (CheckBox) findViewById(id.checkBoxMeioDia);
-        boxTarde = (CheckBox) findViewById(id.checkBoxTarde);
-        boxNoite = (CheckBox) findViewById(id.checkBoxNoite);
-        checkBoxsListeners();
-
-        boxManha.setChecked(true);
-        boxMeioDia.setChecked(true);
-        boxTarde.setChecked(true);
-        boxNoite.setChecked(true);
-
+        // Cria as séries que serão plotada no gráfico
         series1 = new SimpleXYSeries(Arrays.asList(data.getDias()), Arrays.asList(data.getTurnoManha()),"Manhã");
         series2 = new SimpleXYSeries(Arrays.asList(data.getDias()),Arrays.asList(data.getTurnoMeioDia()), "Meio Dia");
         series3 = new SimpleXYSeries(Arrays.asList(data.getDias()),Arrays.asList(data.getTurnoTarde()), "Tarde");
         series4 = new SimpleXYSeries(Arrays.asList(data.getDias()),Arrays.asList(data.getTurnoNoite()), "Noite");
 
-
+        // Define o formato em barra, cor do grafico e cor da margem
         formatter1 = new MyBarFormatter(Color.BLUE, Color.BLACK);
         formatter2 = new MyBarFormatter(Color.RED, Color.BLACK);
         formatter3 = new MyBarFormatter(Color.GRAY, Color.BLACK);
         formatter4 = new MyBarFormatter(Color.GREEN, Color.BLACK);
-
 
         myPlot.addSeries(series1, formatter1);
         myPlot.addSeries(series2, formatter2);
         myPlot.addSeries(series3, formatter3);
         myPlot.addSeries(series4, formatter4);
 
-        double[] inc_domain = new double[]{1};
-        myPlot.setDomainStepModel(new StepModelFit(myPlot.getBounds().getxRegion(),inc_domain,0));
-        myPlot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).
-                setFormat(new DecimalFormat("####"));
+        //Altera para formato decimal os valores dos eixos
+        myPlot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.BOTTOM).setFormat(new DecimalFormat("####"));
+        myPlot.getGraph().getLineLabelStyle(XYGraphWidget.Edge.LEFT).setFormat(new DecimalFormat("####"));
 
-        // set a fixed origin and a "by-value" step mode so that grid lines will
-        // move dynamically with the data when the users pans or zooms:
+        // Define valores fixos a origem para que as linhas do grid se movimentem dinamicamente com o scroll
         myPlot.setUserDomainOrigin(0);
         myPlot.setUserRangeOrigin(0);
 
         myPlot.setRangeStep(StepMode.INCREMENT_BY_VAL, 50);
         myPlot.setRangeBoundaries(0,400, BoundaryMode.FIXED);
 
-        //myPlot.setDomainStep(StepMode.INCREMENT_BY_VAL, 1);
-        myPlot.setDomainBoundaries(0,5,BoundaryMode.FIXED );
+        // Define o espaçamento do dominio de 1 em 1 e o tamanho total de 5
+        myPlot.setDomainStep(StepMode.INCREMENT_BY_VAL, 1);
+        myPlot.setDomainBoundaries(0.5,5,BoundaryMode.FIXED );
 
-        myPlot.getLegend().setVisible(false);
+        myPlot.getLegend().setVisible(false); // Desabilita a legenda
+        //myPlot.getLegend().setTableModel(new DynamicTableModel(2, 2, TableOrder.ROW_MAJOR));
 
+
+        // Define a largura e o modo de exibição das barras como "empiplhadas"
         MyBarRender render = (MyBarRender) myPlot.getRenderer(MyBarRender.class);
         render.setBarGroupWidth(BarRenderer.BarGroupWidthMode.FIXED_WIDTH, PixelUtils.dpToPix(35));
         render.setBarOrientation(BarRenderer.BarOrientation.STACKED);
 
+        //Check box para adicionar e remover series do grafico
+        boxManha = (CheckBox) findViewById(id.checkBoxManha);
+        boxMeioDia = (CheckBox) findViewById(id.checkBoxMeioDia);
+        boxTarde = (CheckBox) findViewById(id.checkBoxTarde);
+        boxNoite = (CheckBox) findViewById(id.checkBoxNoite);
 
+        checkBoxsListeners();
+
+        boxManha.setChecked(true);
+        boxMeioDia.setChecked(true);
+        boxTarde.setChecked(true);
+        boxNoite.setChecked(true);
 
     }
 
@@ -106,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
         myPlot.redraw();
     }
+
     private void meioDiaCheckBoxClicked(boolean checked){
         if (checked) {
             myPlot.addSeries(series2, formatter2);
@@ -186,6 +211,7 @@ class MyBarRender extends BarRenderer<MyBarFormatter>{
         super(plot);
     }
 }
+
 
 
 

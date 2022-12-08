@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/select_Data"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -12,33 +13,54 @@
         android:orientation="vertical">
 
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/transparent">
 
-            <TextView
-                android:id="@+id/titulo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+            <EditText
+                android:id="@+id/selectMonth"
+                android:layout_width="174dp"
+                android:layout_height="51dp"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:enabled="false"
+                android:gravity="center_horizontal|center_vertical"
+                android:hint="01/01/2022"
+                android:inputType="date"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textSelectMes" />
+
+            <ImageView
+                android:id="@+id/selectMonthButtom"
+                android:layout_width="51dp"
+                android:layout_height="51dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintStart_toEndOf="@+id/selectMonth"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:srcCompat="@android:drawable/ic_menu_my_calendar" />
 
             <com.androidplot.xy.XYPlot
                 android:id="@+id/barPlotMensal"
                 style="@style/APDefacto.Dark"
                 android:layout_width="match_parent"
                 android:layout_height="387dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="35dp"
+                app:domainTitle="Dias"
+                app:graphMarginBottom="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titulo"
+                app:layout_constraintTop_toBottomOf="@+id/selectMonth"
+                app:marginBottom="0dp"
                 app:rangeTitle="Fluxo de Pessoas"
                 app:title="Fluxo Mensal" />
 
@@ -46,26 +68,23 @@
                 android:id="@+id/checkBoxManha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Manhã"
-                android:saveEnabled="false"
                 android:buttonTint="@android:color/holo_blue_dark"
+                android:saveEnabled="false"
+                android:text="Manhã"
                 app:layout_constraintEnd_toStartOf="@+id/checkBoxMeioDia"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/barPlotMensal"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/barPlotMensal" />
 
             <CheckBox
                 android:id="@+id/checkBoxMeioDia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginBottom="400dp"
-                android:text="Meio Dia"
-                android:saveEnabled="false"
                 android:buttonTint="@android:color/holo_red_light"
+                android:saveEnabled="false"
+                android:text="Meio Dia"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/checkBoxTarde"
                 app:layout_constraintHorizontal_bias="0.5"
@@ -74,12 +93,11 @@
 
             <CheckBox
                 android:id="@+id/checkBoxTarde"
-                android:layout_width="wrap_content"
+                android:layout_width="68dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Tarde"
-                android:saveEnabled="false"
                 android:buttonTint="@android:color/darker_gray"
+                android:saveEnabled="false"
+                android:text="Tarde"
                 app:layout_constraintEnd_toStartOf="@+id/checkBoxNoite"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxMeioDia"
@@ -89,14 +107,28 @@
                 android:id="@+id/checkBoxNoite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Noite"
-                android:saveEnabled="false"
                 android:buttonTint="@android:color/holo_green_light"
+                android:saveEnabled="false"
+                android:text="Noite"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/checkBoxTarde"
                 app:layout_constraintTop_toBottomOf="@+id/barPlotMensal" />
+
+            <TextView
+                android:id="@+id/textSelectMes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Selecione o mês:"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.035"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
