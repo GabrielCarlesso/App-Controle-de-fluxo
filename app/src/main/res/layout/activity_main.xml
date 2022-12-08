@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent">
+
+            <TextView
+                android:id="@+id/titulo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <com.androidplot.xy.XYPlot
+                android:id="@+id/barPlotMensal"
+                style="@style/APDefacto.Dark"
+                android:layout_width="match_parent"
+                android:layout_height="387dp"
+                android:layout_marginTop="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/titulo"
+                app:rangeTitle="Fluxo de Pessoas"
+                app:title="Fluxo Mensal" />
+
+            <CheckBox
+                android:id="@+id/checkBoxManha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Manhã"
+                android:saveEnabled="false"
+                android:buttonTint="@android:color/holo_blue_dark"
+                app:layout_constraintEnd_toStartOf="@+id/checkBoxMeioDia"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/barPlotMensal"
+                />
+
+            <CheckBox
+                android:id="@+id/checkBoxMeioDia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="400dp"
+                android:text="Meio Dia"
+                android:saveEnabled="false"
+                android:buttonTint="@android:color/holo_red_light"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/checkBoxTarde"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/checkBoxManha"
+                app:layout_constraintTop_toBottomOf="@+id/barPlotMensal" />
+
+            <CheckBox
+                android:id="@+id/checkBoxTarde"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Tarde"
+                android:saveEnabled="false"
+                android:buttonTint="@android:color/darker_gray"
+                app:layout_constraintEnd_toStartOf="@+id/checkBoxNoite"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/checkBoxMeioDia"
+                app:layout_constraintTop_toBottomOf="@+id/barPlotMensal" />
+
+            <CheckBox
+                android:id="@+id/checkBoxNoite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Noite"
+                android:saveEnabled="false"
+                android:buttonTint="@android:color/holo_green_light"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/checkBoxTarde"
+                app:layout_constraintTop_toBottomOf="@+id/barPlotMensal" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
+
+</ScrollView>
